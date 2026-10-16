@@ -17,7 +17,7 @@ from langchain_core.tools import tool
 
 # https://openrouter.ai/docs/guides/community/langchain
 model = init_chat_model(
-    model="mistralai/mistral-small-2603",
+    model="openai/gpt-4.1-mini",#"mistralai/mistral-small-2603",
     model_provider="openai",
     base_url="https://openrouter.ai/api/v1",
     api_key=os.environ["OPENROUTER_API_KEY"],
@@ -42,13 +42,17 @@ class State(AgentState):
 @tool
 def read_preference(runtime: ToolRuntime[Context, State]):
     """Read state"""
-    return runtime.state.get("aime_python")
+    return {
+        "aime_python": runtime.state["aime_python"],
+        "aime_javascript": runtime.state["aime_javascript"],
+    }
 
 
 @tool
-def update_preference(runtime: ToolRuntime[Context, State], aime_python: bool):
+def update_preference(runtime: ToolRuntime[Context, State], aime_python: bool | None, aime_javascript: bool | None):
     """Update state"""
     runtime.state["aime_python"] = aime_python
+    runtime.state["aime_javascript"] = aime_python
     return "Préférence mise à jour avec succès"
 
 # Autres exempltes d'outils
@@ -69,5 +73,5 @@ graph = create_agent(
         "You are a concise assistant. "
         "Use tools when they add factual precision, then return a direct answer."
     ),
-    name="simple_agent",
+    name="deployed_simple_agent",
 )
