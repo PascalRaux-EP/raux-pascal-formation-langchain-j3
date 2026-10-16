@@ -5,7 +5,7 @@ databases:
   - name: agent-postgres
     databaseName: agent_service
     user: agent_service
-    plan: basic-256mb
+    plan: free
     region: frankfurt
 
 envVarGroups:
@@ -20,7 +20,7 @@ services:
     name: agent-service
     runtime: docker
     region: frankfurt
-    plan: starter
+    plan: free
     dockerfilePath: ./docker/Dockerfile.service
     dockerContext: .
     healthCheckPath: /info
@@ -68,15 +68,15 @@ services:
     name: streamlit-app
     runtime: docker
     region: frankfurt
-    plan: starter
+    plan: free
     dockerfilePath: ./docker/Dockerfile.app
     dockerContext: .
     healthCheckPath: /healthz
     envVars:
       - fromGroup: agent-shared
-      # Private network: host is the service name; both services must share a region.
+      # Free web services can't receive private-network traffic, so use the public URL.
       - key: AGENT_URL
-        value: http://agent-service:8080
+        value: https://agent-service.onrender.com
       # Streamlit ignores Render's PORT, so bind it explicitly.
       - key: STREAMLIT_SERVER_PORT
         value: "8501"
