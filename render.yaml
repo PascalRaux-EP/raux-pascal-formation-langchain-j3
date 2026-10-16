@@ -23,7 +23,7 @@ services:
     plan: free
     dockerfilePath: ./docker/Dockerfile.service
     dockerContext: .
-    healthCheckPath: /info
+    healthCheckPath: /health
     envVars:
       - fromGroup: agent-shared
       - key: PYTHON_VERSION
