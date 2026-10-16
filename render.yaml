@@ -30,6 +30,10 @@ services:
         value: 3.13.15
       - key: HOST
         value: 0.0.0.0
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: LOG_LEVEL
+        value: DEBUG
       - key: DATABASE_TYPE
         value: postgres
       - key: POSTGRES_HOST
