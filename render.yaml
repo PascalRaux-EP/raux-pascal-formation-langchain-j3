@@ -1,0 +1,86 @@
+# Render Blueprint - https://render.com/docs/blueprint-spec
+# Mirrors compose.yaml: postgres + agent_service (FastAPI) + streamlit_app.
+
+databases:
+  - name: agent-postgres
+    databaseName: agent_service
+    user: agent_service
+    plan: basic-256mb
+    region: frankfurt
+
+envVarGroups:
+  # Shared by both services so the Streamlit client can authenticate to the API.
+  - name: agent-shared
+    envVars:
+      - key: AUTH_SECRET
+        generateValue: true
+
+services:
+  - type: web
+    name: agent-service
+    runtime: docker
+    region: frankfurt
+    plan: starter
+    dockerfilePath: ./docker/Dockerfile.service
+    dockerContext: .
+    healthCheckPath: /info
+    envVars:
+      - fromGroup: agent-shared
+      - key: PORT
+        value: "8080"
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_TYPE
+        value: postgres
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: agent-postgres
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: agent-postgres
+          property: port
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: agent-postgres
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: agent-postgres
+          property: password
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: agent-postgres
+          property: database
+      # Secrets: prompted for on first Blueprint creation. At least one LLM key is required.
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: LANGSMITH_API_KEY
+        sync: false
+
+  - type: web
+    name: streamlit-app
+    runtime: docker
+    region: frankfurt
+    plan: starter
+    dockerfilePath: ./docker/Dockerfile.app
+    dockerContext: .
+    healthCheckPath: /healthz
+    envVars:
+      - fromGroup: agent-shared
+      # Private network: host is the service name; both services must share a region.
+      - key: AGENT_URL
+        value: http://agent-service:8080
+      # Streamlit ignores Render's PORT, so bind it explicitly.
+      - key: STREAMLIT_SERVER_PORT
+        value: "8501"
+      - key: STREAMLIT_SERVER_ADDRESS
+        value: 0.0.0.0
+      - key: STREAMLIT_SERVER_HEADLESS
+        value: "true"
