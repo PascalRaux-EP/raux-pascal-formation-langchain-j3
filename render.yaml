@@ -28,8 +28,6 @@ services:
       - fromGroup: agent-shared
       - key: PYTHON_VERSION
         value: 3.13.15
-      - key: PORT
-        value: "8080"
       - key: HOST
         value: 0.0.0.0
       - key: DATABASE_TYPE
@@ -81,9 +79,11 @@ services:
       # Free web services can't receive private-network traffic, so use the public URL.
       - key: AGENT_URL
         value: https://agent-service.onrender.com
-      # Streamlit ignores Render's PORT, so bind it explicitly.
+      # Streamlit ignores PORT, so bind it to Render's default port (10000) explicitly.
+      - key: PORT
+        value: "10000"
       - key: STREAMLIT_SERVER_PORT
-        value: "8501"
+        value: "10000"
       - key: STREAMLIT_SERVER_ADDRESS
         value: 0.0.0.0
       - key: STREAMLIT_SERVER_HEADLESS
