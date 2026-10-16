@@ -30,3 +30,9 @@ lint:
 
 format:
 	uv run python -m ruff format src tests
+
+run-studio-eu:
+	uv run langgraph dev --studio-url https://eu.smith.langchain.com
+
+run-studio-with-tunnel:
+	uv run langgraph dev --tunnel --studio-url https://eu.smith.langchain.com
