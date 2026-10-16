@@ -26,6 +26,8 @@ services:
     healthCheckPath: /info
     envVars:
       - fromGroup: agent-shared
+      - key: PYTHON_VERSION
+        value: 3.13.15
       - key: PORT
         value: "8080"
       - key: HOST
@@ -74,6 +76,8 @@ services:
     healthCheckPath: /healthz
     envVars:
       - fromGroup: agent-shared
+      - key: PYTHON_VERSION
+        value: 3.13.15
       # Free web services can't receive private-network traffic, so use the public URL.
       - key: AGENT_URL
         value: https://agent-service.onrender.com
