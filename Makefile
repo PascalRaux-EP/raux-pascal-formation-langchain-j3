@@ -36,3 +36,6 @@ run-studio-eu:
 
 run-studio-with-tunnel:
 	uv run langgraph dev --tunnel --studio-url https://eu.smith.langchain.com
+
+run-headless-on-render:
+	uv run langgraph dev --port $PORT --host 0.0.0.0 --no-browser
