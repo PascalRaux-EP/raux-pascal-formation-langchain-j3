@@ -17,7 +17,7 @@ model = init_chat_model(
 
 agent = create_agent(
     model=model,
-    tools=[tool(common.utc_now), tool(common.multiply)],
+    tools=[tool(common.utc_now), tool(common.multiply), tool(common.search_docs)],
     system_prompt=SYSTEM_PROMPT,
     response_format=ToolStrategy(Reponse),
 )

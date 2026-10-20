@@ -14,7 +14,7 @@ agent = Agent(
     ),
     output_type=Reponse,
     system_prompt=SYSTEM_PROMPT,
-    tools=[common.utc_now, common.multiply],
+    tools=[common.utc_now, common.multiply, common.search_docs],
 )
 
 if __name__ == "__main__":

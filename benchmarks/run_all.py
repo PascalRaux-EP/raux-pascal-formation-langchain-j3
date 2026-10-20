@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 
 here = Path(__file__).parent
-for name in ("langchain", "pydantic_ai", "haystack", "claude_sdk"):
+for name in ("langchain", "pydantic_ai", "haystack", "deepagents", "claude_sdk"):
     script = here / f"bench_{name}.py"
     loc = sum(1 for l in script.read_text().splitlines() if l.strip() and not l.strip().startswith("#"))
     t0 = time.perf_counter()

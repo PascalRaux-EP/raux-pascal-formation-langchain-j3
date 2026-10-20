@@ -1,4 +1,4 @@
-.PHONY: help install dev run test integration-tests lint format
+.PHONY: help install dev run test integration-tests lint format bench
 
 help:  ## Show this help
 	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -36,3 +36,5 @@ run-studio-with-tunnel:  ## run dev using eu studio and auto tunnel
 
 run-headless-on-render: ## for render but does not work (yet) if invoked by makefile
 	uv run langgraph dev --port $PORT --host 0.0.0.0 --no-browser
+bench: ## Compare agent frameworks on the same task
+	uv run --group bench python benchmarks/run_all.py

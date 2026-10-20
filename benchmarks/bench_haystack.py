@@ -18,6 +18,7 @@ agent = Agent(
     tools=[
         create_tool_from_function(common.utc_now),
         create_tool_from_function(common.multiply),
+        create_tool_from_function(common.search_docs),
     ],
     system_prompt=SYSTEM_PROMPT,
 )
