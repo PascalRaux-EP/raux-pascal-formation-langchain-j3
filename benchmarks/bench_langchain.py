@@ -23,5 +23,5 @@ agent = create_agent(
 )
 
 if __name__ == "__main__":
-    result = agent.invoke({"messages": [("user", QUESTION)]})
+    result = agent.invoke({"messages": [("User", QUESTION)]})
     print(result["structured_response"])
